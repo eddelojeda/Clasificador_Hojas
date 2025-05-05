@@ -1,0 +1,4 @@
+name: ambiente_9
+channels:
+  - defaults
+prefix: /LUSTRE/home/rn_lcc_09/.conda/envs/ambiente_9
