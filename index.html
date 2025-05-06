@@ -56,7 +56,6 @@
     #cameraOffMsg {
       width: 90vw;
       max-width: 800px;
-      height: contain;
       max-height: 480px;
       border: 3px solid black;
       border-radius: 30px;
@@ -125,10 +124,9 @@
 
     async function loadModel() {
       try {
-        console.log("Intentando cargar el modelo...");
-        model = await tf.loadLayersModel('./model.json');
-        console.log(model.summary());
-        console.log("Modelo cargado correctamente.");
+        console.log("Intentando cargar el modelo desde ./model.json");
+        model = await tf.loadLayersModel('model.json');
+        predictionElement.innerText = "Modelo cargado correctamente. Enciende la cámara.";
       } catch (loadError) {
         console.error('Error al cargar el modelo:', loadError);
         predictionElement.innerText = 'Error al cargar el modelo: ' + loadError.message;
@@ -193,12 +191,12 @@
         if (model && webcamElement.readyState === 4) {
           context.drawImage(webcamElement, 0, 0, 224, 224);
           const imageData = context.getImageData(0, 0, 224, 224);
-          let img = tf.browser.fromPixels(imageData).toFloat().div(tf.scalar(255)).expandDims(0);
+          let img = tf.browser.fromPixels(imageData).toFloat().div(255).expandDims(0);
 
           const prediction = model.predict(img);
-          const predictionArray = await prediction.data();  // <-- obtenemos los valores
+          const predictionArray = await prediction.data();
           const classIndex = prediction.argMax(-1).dataSync()[0];
-          const probability = (predictionArray[classIndex] * 100).toFixed(2);  // <-- porcentaje
+          const probability = (predictionArray[classIndex] * 100).toFixed(2);
 
           predictionElement.innerText = `Predicción: ${classNames[classIndex]} (${probability}%)`;
         }
