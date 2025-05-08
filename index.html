@@ -125,7 +125,7 @@
     async function loadModel() {
       try {
         console.log("Intentando cargar el modelo desde ./model.json");
-        model = await tf.loadLayersModel('model.json');
+        const model = await tf.loadLayersModel('/model.json');
         predictionElement.innerText = "Modelo cargado correctamente. Enciende la cámara.";
       } catch (loadError) {
         console.error('Error al cargar el modelo:', loadError);
